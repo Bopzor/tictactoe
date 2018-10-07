@@ -120,8 +120,7 @@ io.on('connection', (socket) => {
   socket.on('start', (size) => {
     game.init(size);
 
-    socket.emit('display-board', game.size);
-    socket.broadcast.emit('display-board', game.size);
+    io.emit('display-board', game.size);
 
     setPlayers();
     socket.emit('setPlayer', 'X');
@@ -148,22 +147,19 @@ io.on('connection', (socket) => {
       } else {
         game.setCell(cell, currentPlayer);
 
-        socket.emit('played', currentPlayer, cell);
-        socket.broadcast.emit('played', currentPlayer, cell);
+        io.emit('played', currentPlayer, cell);
 
         if (game.win()) {
           game.setWinner(currentPlayer);
 
-          socket.emit('win', game.winner);
-          socket.broadcast.emit('win', game.winner);
+          io.emit('win', game.winner);
 
           return;
 
         } else if (game.draw()) {
           game.setWinner('Nobody');
 
-          socket.emit('draw');
-          socket.broadcast.emit('draw');
+          io.emit('draw');
 
           return;
         }
@@ -180,20 +176,17 @@ io.on('connection', (socket) => {
       } else {
         game.setCell(cell, currentPlayer);
 
-        socket.emit('played', currentPlayer, cell);
-        socket.broadcast.emit('played', currentPlayer, cell);
+        io.emit('played', currentPlayer, cell);
 
         if (game.win()) {
           game.setWinner(currentPlayer);
 
-          socket.emit('win', game.winner);
-          socket.broadcast.emit('win', game.winner);
+          io.emit('win', game.winner);
 
           return;
 
         } else if (game.draw()) {
-          socket.emit('draw');
-          socket.broadcast.emit('draw');
+          io.emit('draw');
 
           return;
         }
